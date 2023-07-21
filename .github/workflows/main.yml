@@ -1,9 +1,9 @@
-name: CodeQL Analysis
+name: Code Coverage
 
-on: 
+on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   code-coverage:
@@ -27,14 +27,13 @@ jobs:
           coverage xml -o coverage.xml
           coverage report
 
-      - name: Convert to SARIF format
-        run: coverage json -o coverage.sarif
-
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/codeql@v1
+        uses: github/codeql-action/analyze@v1
         with:
           languages: python
-          query: python-code-scanning.qls
+
+      - name: Convert to SARIF format
+        run: coverage json -o coverage.sarif
 
       - name: Upload SARIF report to GitHub
         uses: github/codeql-action/upload-sarif@v1
